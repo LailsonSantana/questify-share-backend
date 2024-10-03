@@ -2,6 +2,7 @@ package com.example.questifysharedapi.model;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,5 +28,10 @@ public class Question {
     private String statement;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
-    private List<Answer> answers;// = new HashSet<>();
+    private List<Answer> answers;
+
+    @JoinColumn(name = "user_id")
+    @ManyToOne
+    @JsonIgnore
+    private User user;
 }

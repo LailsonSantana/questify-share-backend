@@ -36,11 +36,7 @@ public class QuestionController {
 
     @GetMapping
     public ResponseEntity<List<Question>> getAllQuestions(){
-        List<Question> questions = new ArrayList<>();
-        questions = questionService.getAllQuestions();
-        for(Question q : questions){
-            log.info("Respostas {}" , q.getAnswers().size());
-        }
+
         return ResponseEntity.ok(questionService.getAllQuestions());
     }
 }

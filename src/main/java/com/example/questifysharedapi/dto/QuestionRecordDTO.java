@@ -6,5 +6,5 @@ import java.util.List;
 import java.util.Set;
 
 public record QuestionRecordDTO(Long id , String statement,
-                                List<AnswerRecordDTO> answersRecords) {
+                                List<AnswerRecordDTO> answersRecords , Long userId) {
 }

@@ -6,6 +6,8 @@ import com.example.questifysharedapi.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -20,8 +22,12 @@ public class UserService {
         User user = new User();
         user.setName(userRecordDTO.name());
         user.setEmail(userRecordDTO.email());
-        user.setPassword(user.getPassword());
+        user.setPassword(userRecordDTO.password());
         user.setType(user.getType());
-        return null;
+        return userRepository.save(user);
+    }
+
+    public List<User> getAllUsers(){
+        return userRepository.findAll();
     }
 }
