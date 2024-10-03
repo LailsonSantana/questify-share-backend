@@ -1,18 +1,19 @@
 package com.example.questifysharedapi.model;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "TB_ANSWER")
+@Table(name = "TB_COMMENT")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Answer {
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,11 +21,13 @@ public class Answer {
 
     private String text;
 
-    private Boolean isCorrect;
+    @ManyToOne
+    @JsonIgnore
+    private Question question;
 
     @ManyToOne
-    @JoinColumn(name = "question_id") // foreigner key
-    @JsonIgnore // Used to resolve serialization problems
-    private Question question;
+    @JsonIgnore
+    private User user;
+
 
 }
