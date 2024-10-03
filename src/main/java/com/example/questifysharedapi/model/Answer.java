@@ -1,15 +1,13 @@
 package com.example.questifysharedapi.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
-@Table
+@Table(name = "TB_ANSWER")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,6 +16,7 @@ public class Answer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
     private String text;
@@ -26,7 +25,7 @@ public class Answer {
 
     @ManyToOne
     @JoinColumn(name = "question_id") // foreigner key
-    @JsonManagedReference // Used to resolve serialization problems
+    @JsonIgnore // Used to resolve serialization problems
     private Question question;
 
 }

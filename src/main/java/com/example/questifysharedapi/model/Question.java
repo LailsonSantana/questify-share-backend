@@ -2,16 +2,16 @@ package com.example.questifysharedapi.model;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table
+@Table(name = "TB_QUESTION")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,12 +20,12 @@ public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
-    @Column // It say that this field is a data column
+    @Column(unique = true) // It say that this field is a data column
     private String statement;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
-    @JsonBackReference
-    private Set<Answer> answers;
+    private List<Answer> answers;// = new HashSet<>();
 }
