@@ -22,7 +22,6 @@ public class UserController {
     @PostMapping
     public ResponseEntity<User> saveUser(@RequestBody UserRecordDTO userRecordDTO){
         try{
-            log.info("Metodo chamado");
             return ResponseEntity.status(HttpStatus.CREATED).body(userService.saveUser(userRecordDTO));
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
