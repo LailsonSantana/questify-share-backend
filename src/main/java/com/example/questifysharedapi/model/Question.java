@@ -24,6 +24,7 @@ public class Question {
     @EqualsAndHashCode.Include
     private Long id;
 
+    @Lob
     @Column(unique = true) // It say that this field is a data column
     private String statement;
 

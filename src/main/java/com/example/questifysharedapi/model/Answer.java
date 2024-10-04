@@ -19,6 +19,7 @@ public class Answer {
     @EqualsAndHashCode.Include
     private Long id;
 
+    @Lob
     private String text;
 
     private Boolean isCorrect;
