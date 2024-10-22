@@ -1,15 +1,12 @@
 package com.example.questifysharedapi.model;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "TB_QUESTION")
@@ -25,16 +22,22 @@ public class Question {
     private Long id;
 
     @Lob
-    @Column(unique = true) // It say that this field is a data column
+    @Column(unique = true , nullable = true) // It say that this field is a data column
     private String statement;
+
+    @Column(nullable = true)
+    private String discipline;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
     private List<Answer> answers;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
-    private List<Comment> comment;
+    private List<Comment> comments;
 
-    @JoinColumn(name = "user_id")
+    @OneToMany(mappedBy = "question")
+    private List<Classification> classifications = new ArrayList<>();
+
+    @JoinColumn(name = "user_id" , nullable = true)
     @ManyToOne
     @JsonIgnore
     private User user;

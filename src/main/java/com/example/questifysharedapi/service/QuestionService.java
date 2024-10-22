@@ -8,35 +8,35 @@ import com.example.questifysharedapi.repository.AnswerRepository;
 import com.example.questifysharedapi.repository.QuestionRepository;
 import com.example.questifysharedapi.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
     private final UserRepository userRepository;
 
-    public QuestionService(QuestionRepository questionRepository, AnswerRepository answerRepository, UserRepository userRepository) {
-        this.questionRepository = questionRepository;
-        this.answerRepository = answerRepository;
-        this.userRepository = userRepository;
-    }
 
     @Transactional
     public Question saveQuestion(QuestionRecordDTO questionRecordDTO){
         Question question = new Question();
+        log.info("ALTERNATIVA {}" , questionRecordDTO);
         question.setStatement(questionRecordDTO.statement());
-        question.setUser(userRepository.findById(questionRecordDTO.userId()).get());
+        question.setDiscipline(questionRecordDTO.discipline());
+        if(questionRecordDTO.userId() != null){
+            question.setUser(userRepository.findById(questionRecordDTO.userId()).get());
+        }
         Question questionSaved = questionRepository.save(question);
-        List<Answer> answers = questionRecordDTO.answersRecords().stream().map(answerDTO -> {
+        List<Answer> answers = questionRecordDTO.answers().stream().map(answerDTO -> {
             Answer answer = new Answer();
             answer.setText(answerDTO.text());
             answer.setIsCorrect(answerDTO.isCorrect());
@@ -44,12 +44,29 @@ public class QuestionService {
             return answerRepository.save(answer); // save the answer
         }).collect(Collectors.toList());
         questionSaved.setAnswers(answers);
-        return questionSaved;
+        return questionRepository.save(question);
     }
 
-    public List<Question> getAllQuestions(){
-        return questionRepository.findAll();
+   // public List<Question> getAllQuestions(){
+       // return questionRepository.findAll();
+    //}
+
+   public List<QuestionRecordDTO> getAllQuestions(){
+        List<Question> questions = new ArrayList<>();
+        questions = questionRepository.findAll();
+        return questions.stream()
+                .map(question -> new QuestionRecordDTO(
+                        question.getId(),
+                        question.getStatement(),
+                        question.getDiscipline(),
+                        question.getAnswers().stream()
+                                .map(answer -> new AnswerRecordDTO(
+                                        answer.getText(),
+                                        answer.getIsCorrect()
+                                )).collect(Collectors.toList()),
+                        question.getUser().getId(),
+                        question.getUser().getName()
+                ))
+                .collect(Collectors.toList());
     }
-
-
 }

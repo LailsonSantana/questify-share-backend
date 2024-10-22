@@ -26,7 +26,6 @@ public class QuestionController {
     @PostMapping
     public ResponseEntity<Question> saveQuestion(@RequestBody QuestionRecordDTO questionRecordDTO){
         try{
-            log.info("THE METHOD CREATE WITH WAS CALLED ");
             return ResponseEntity.status(HttpStatus.CREATED).body(questionService.saveQuestion(questionRecordDTO));
         }catch (Exception e){
             log.info("ERROR : {} " ,e.getMessage());
@@ -35,7 +34,7 @@ public class QuestionController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Question>> getAllQuestions(){
+    public ResponseEntity<List<QuestionRecordDTO>> getAllQuestions(){
 
         return ResponseEntity.ok(questionService.getAllQuestions());
     }
