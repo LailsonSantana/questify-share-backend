@@ -38,4 +38,10 @@ public class QuestionController {
 
         return ResponseEntity.ok(questionService.getAllQuestions());
     }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<QuestionRecordDTO>> filterQuestions(@RequestParam String discipline){
+        List<QuestionRecordDTO> qdto =questionService.filterQuestions(discipline);
+        return ResponseEntity.ok(qdto);
+    }
 }

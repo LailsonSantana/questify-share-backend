@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Slf4j
 @AllArgsConstructor
+@Slf4j
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
@@ -68,5 +68,28 @@ public class QuestionService {
                         question.getUser().getName()
                 ))
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<QuestionRecordDTO> filterQuestions(String discipline) {
+        List<Question> questions = new ArrayList<>();
+        questions = questionRepository.findAllByDiscipline(discipline);
+        List<QuestionRecordDTO> qdto = new ArrayList<>();
+
+        qdto= questions.stream()
+                .map(question -> new QuestionRecordDTO(
+                    question.getId(),
+                    question.getStatement(),
+                    question.getDiscipline(),
+                    question.getAnswers().stream()
+                            .map(answer -> new AnswerRecordDTO(
+                                answer.getText(),
+                                answer.getIsCorrect()
+                                    )).collect(Collectors.toList()),
+                question.getUser().getId(),
+                question.getUser().getName()
+                )).collect(Collectors.toList());
+        log.info("OBJETOOOOO {}" ,qdto);
+        return qdto;
     }
 }
